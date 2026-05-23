@@ -15,6 +15,7 @@ import feedbackRouter from "./routes/feedback/feedback.router";
 import authRouter from "./routes/auth/auth.router";
 import { errorMiddleware } from "./middleware/error.middleware";
 import {nlpService} from "./modules/nlp/nlp.service";
+import {swaggerSpec, swaggerUi} from "../src/config/swagger"
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -50,7 +51,12 @@ app.use("/api/recommendation", recommendationRouter);
 app.use("/api/feedback", feedbackRouter);
 app.use("/api/auth", authRouter);
 
-// Must stay LAST
+app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec)
+    )
+
 app.use(errorMiddleware);
 
 const startServer = async () => {
